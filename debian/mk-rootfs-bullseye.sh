@@ -62,8 +62,9 @@ echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 echo "nameserver 127.0.0.53" >> /etc/resolv.conf
 echo "nameserver 114.114.114.114" >> /etc/resolv.conf
 
-echo "deb http://mirrors.ustc.edu.cn/debian/ bullseye-backports main contrib" >> /etc/apt/sources.list
-echo "deb-src http://mirrors.ustc.edu.cn/debian/ bullseye-backports main contrib" >> /etc/apt/sources.list
+# bullseye-backports 已 EOL 并从镜像删除，且工程未用(-t bullseye-backports)，故关闭
+# echo "deb http://mirrors.ustc.edu.cn/debian/ bullseye-backports main contrib" >> /etc/apt/sources.list
+# echo "deb-src http://mirrors.ustc.edu.cn/debian/ bullseye-backports main contrib" >> /etc/apt/sources.list
 
 apt-get update
 apt-get upgrade -y
@@ -225,6 +226,37 @@ then
         rm /etc/profile.d/qt.sh
 fi
 cd -
+
+#---------RKROS---------
+echo -e "\033[36m Install RKROS.................... \033[0m"
+sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen
+locale-gen
+
+\${APT_INSTALL} software-properties-common
+\${APT_INSTALL} /packages/humble/ros2-apt-source.deb
+apt-get update -y
+
+\${APT_INSTALL} python3-flake8-docstrings python3-pip python3-pytest-cov ros-dev-tools
+
+python3 -m pip install -U flake8-blind-except flake8-builtins flake8-class-newline flake8-comprehensions flake8-deprecated flake8-import-order flake8-quotes "pytest>=5.3" pytest-repeat pytest-rerunfailures empy==3.3.4
+
+cat /packages/humble/rosdep_install_humble | xargs \${APT_INSTALL}
+
+\${APT_INSTALL} libopencv-dev
+
+rosdep init
+su linaro
+rosdep update
+exit
+
+\${APT_INSTALL} /packages/humble/ros2-humble-bin-1.0.0-1-arm64.deb /packages/humble/vision-opencv-1.0.0-1-arm64.deb
+
+# output/ 里的额外 .deb 有才装，避免空 glob 导致整条 apt 失败
+if ls /packages/output/*.deb >/dev/null 2>&1; then
+	\${APT_INSTALL} /packages/output/*.deb
+fi
+
+history -c
 
 rm -rf /var/lib/apt/lists/*
 rm -rf /var/cache/
