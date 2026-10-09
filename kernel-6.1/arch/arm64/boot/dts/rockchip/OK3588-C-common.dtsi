@@ -193,7 +193,6 @@
 		regulator-max-microvolt = <1800000>;
 		enable-active-high;
 		regulator-boot-on;
-		regulator-always-on;
 		gpios = <&gpio3 RK_PB2 GPIO_ACTIVE_HIGH>;
 		vin-supply = <&vcc5v0_sys>;
 	};
@@ -206,7 +205,6 @@
 		regulator-max-microvolt = <1800000>;
 		enable-active-high;
 		regulator-boot-on;
-		regulator-always-on;
 		gpios = <&gpio3 RK_PC6 GPIO_ACTIVE_HIGH>;
 		vin-supply = <&vcc5v0_sys>;
 	};
@@ -720,7 +718,7 @@
 		interrupts = <RK_PC0 IRQ_TYPE_EDGE_FALLING>;
 		touchscreen-size-x = <1024>;
 		touchscreen-size-y = <600>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	gt9xx_dsi0: gt9xx@14 {
@@ -737,7 +735,7 @@
 		is-mutex;
 		filter-reg = <0x38>;
 		bus-reg = <0x02>;
-        	status = "okay";
+        	status = "disabled";
     	};
 
 	usbc0: fusb302@22 {
@@ -834,7 +832,7 @@
 		interrupts = <RK_PD3 IRQ_TYPE_EDGE_FALLING>;
 		touchscreen-size-x = <1024>;
 		touchscreen-size-y = <600>;
-		status = "okay";
+		status = "disabled";
 	};
 	
 	gt9xx_dsi1: gt9xx@14 {
@@ -851,7 +849,7 @@
 		is-mutex;
 		filter-reg = <0x38>;
 		bus-reg = <0x05>;
-        	status = "okay";
+        	status = "disabled";
     	};
 
 	rtc: pcf8563@51 {
@@ -1065,40 +1063,51 @@
 		compatible = "simple-panel-dsi";
 		reg = <0>;
 		backlight = <&backlight_dsi0>;
-		reset-delay-ms = <10>;
+		power-supply = <&dsi0_en>;
+		reset-gpios = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;  /* RESX 低有效 */
+		reset-delay-ms = <20>;
 		enable-delay-ms = <10>;
-		prepare-delay-ms = <10>;
+		prepare-delay-ms = <20>;
 		unprepare-delay-ms = <10>;
 		disable-delay-ms = <60>;
-		width-mm = <68>;
-		height-mm = <121>;
+		init-delay-ms = <120>;
+		width-mm = <38>;
+		height-mm = <38>;
+		bpc = <8>;
 		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
 			MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_NO_EOT_PACKET)>;
 		dsi,format = <MIPI_DSI_FMT_RGB888>;
-		dsi,lanes  = <4>;
-//		panel-init-sequence = [
-//		];
-
-//		panel-exit-sequence = [
-//		];
+		dsi,lanes  = <1>;
+		panel-init-sequence = [
+			15 00 02 FE 00
+			15 00 02 3A 77
+			15 00 02 35 00
+			15 00 02 53 20
+			15 00 02 51 FF
+			15 00 02 63 FF
+			39 00 05 2A 00 00 01 DF
+			39 00 05 2B 00 00 01 DF
+			05 50 01 11
+			05 00 01 29
+		];
 
 		panel0_disp_timings0: display-timings {
-			native-mode = <&panel0_7_1024x600>;
-            		panel0_7_1024x600: timings {
-                		hback-porch     = <48>;
-                		hfront-porch    = <40>;
-                		hactive                 = <1024>;
-                		hsync-len               = <48>;
-                		vback-porch     = <48>;
-                		vfront-porch    = <40>;
-                		vactive         = <600>;
-                		vsync-len       = <4>;
-                		clock-frequency = <45000000>;
-                		vsync-active    = <0>;
-                		hsync-active    = <0>;
-                		de-active       = <0>;
-                		pixelclk-active = <0>;
-            		};
+			native-mode = <&panel0_7_480x480>;
+			panel0_7_480x480: timings {
+				hback-porch     = <46>;
+				hfront-porch    = <46>;
+				hactive         = <480>;
+				hsync-len       = <4>;
+				vback-porch     = <46>;
+				vfront-porch    = <46>;
+				vactive         = <480>;
+				vsync-len       = <4>;
+				clock-frequency = <20000000>;
+				vsync-active    = <0>;
+				hsync-active    = <0>;
+				de-active       = <1>;
+				pixelclk-active = <0>;
+			};
 		};
 
 		ports {
@@ -1152,40 +1161,51 @@
 		compatible = "simple-panel-dsi";
 		reg = <0>;
 		backlight = <&backlight_dsi1>;
-		reset-delay-ms = <10>;
+		power-supply = <&dsi1_en>;
+		reset-gpios = <&gpio3 RK_PD2 GPIO_ACTIVE_LOW>;  /* RESX 低有效 */
+		reset-delay-ms = <20>;
 		enable-delay-ms = <10>;
-		prepare-delay-ms = <10>;
+		prepare-delay-ms = <20>;
 		unprepare-delay-ms = <10>;
-		disable-delay-ms = <10>;
-		width-mm = <68>;
-		height-mm = <121>;
+		disable-delay-ms = <60>;
+		init-delay-ms = <120>;
+		width-mm = <38>;
+		height-mm = <38>;
+		bpc = <8>;
 		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
 			MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_NO_EOT_PACKET)>;
 		dsi,format = <MIPI_DSI_FMT_RGB888>;
-		dsi,lanes  = <4>;
-//		panel-init-sequence = [
-//		];
-
-//		panel-exit-sequence = [
-//		];
+		dsi,lanes  = <1>;
+		panel-init-sequence = [
+			15 00 02 FE 00
+			15 00 02 3A 77
+			15 00 02 35 00
+			15 00 02 53 20
+			15 00 02 51 FF
+			15 00 02 63 FF
+			39 00 05 2A 00 00 01 DF
+			39 00 05 2B 00 00 01 DF
+			05 50 01 11
+			05 00 01 29
+		];
 
 		panel1_disp_timings1: display-timings {
-			native-mode = <&panel1_7_1024x600>;
-            		panel1_7_1024x600: timings {
-                		hback-porch     = <48>;
-                		hfront-porch    = <40>;
-                		hactive                 = <1024>;
-                		hsync-len               = <48>;
-                		vback-porch     = <48>;
-                		vfront-porch    = <40>;
-                		vactive         = <600>;
-                		vsync-len       = <4>;
-                		clock-frequency = <45000000>;
-                		vsync-active    = <0>;
-                		hsync-active    = <0>;
-                		de-active       = <0>;
-                		pixelclk-active = <0>;
-            		};
+			native-mode = <&panel1_7_480x480>;
+			panel1_7_480x480: timings {
+				hback-porch     = <46>;
+				hfront-porch    = <46>;
+				hactive         = <480>;
+				hsync-len       = <4>;
+				vback-porch     = <46>;
+				vfront-porch    = <46>;
+				vactive         = <480>;
+				vsync-len       = <4>;
+				clock-frequency = <20000000>;
+				vsync-active    = <0>;
+				hsync-active    = <0>;
+				de-active       = <1>;
+				pixelclk-active = <0>;
+			};
 		};
 
 		ports {
