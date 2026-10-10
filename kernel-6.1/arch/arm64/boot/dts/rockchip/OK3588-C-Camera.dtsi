@@ -188,7 +188,7 @@
 
     cam1_ov13855: cam1-ov13855@36 {
         compatible = "ovti,ov13855";
-        status = "okay";
+        status = "disabled";
         reg = <0x36>;
 
         clocks = <&ext_cam_clk>;
@@ -211,6 +211,30 @@
             };
         };
     };
+
+    cam1_sc132gs: cam1-sc132gs@33 {
+        compatible = "smartsens,sc132gs";
+        status = "okay";
+        reg = <0x33>;
+
+        clocks = <&ext_cam_clk>;
+        clock-names = "xvclk";
+	power-domains = <&power RK3588_PD_VI>;
+        reset-gpios = <&extio EXTIO_GPIO_P00 GPIO_ACTIVE_LOW>;
+	avdd-supply = <&vcc1_2v8>;
+	dovdd-supply = <&vcc1v8_cam>;
+	dvdd-supply = <&vcc1v2_c1>;
+        rockchip,camera-module-index = <0>;
+        rockchip,camera-module-facing = "back";
+        rockchip,camera-module-name = "forlinx";
+        rockchip,camera-module-lens-name = "default";
+        port {
+            cam1_sc132gs_out: endpoint {
+            remote-endpoint = <&mipi_in_0_ucam1>;
+            data-lanes = <1 2>;
+            };
+        };
+    };
 };
 
 &csi2_dcphy0 {
@@ -224,8 +248,8 @@
             #size-cells = <0>;
             mipi_in_0_ucam1: endpoint@1 {
                 reg = <1>;
-                remote-endpoint = <&cam1_ov13855_out>;
-                data-lanes = <1 2 3 4>;
+                remote-endpoint = <&cam1_sc132gs_out>;
+                data-lanes = <1 2>;
             };
         };
         port@1 {
@@ -364,7 +388,7 @@
 
     cam2_ov13855: cam2-ov13855@36 {
         compatible = "ovti,ov13855";
-        status = "okay";
+        status = "disabled";
         reg = <0x36>;
 
         clocks = <&ext_cam_clk>;
@@ -387,6 +411,30 @@
             };
         };
     };
+
+    cam2_sc132gs: cam2-sc132gs@32 {
+        compatible = "smartsens,sc132gs";
+        status = "okay";
+        reg = <0x32>;
+
+        clocks = <&ext_cam_clk>;
+        clock-names = "xvclk";
+	power-domains = <&power RK3588_PD_VI>;
+        reset-gpios = <&extio EXTIO_GPIO_P02 GPIO_ACTIVE_LOW>;
+        avdd-supply = <&vcc1_2v8>;
+        dovdd-supply = <&vcc1v8_cam>;
+        dvdd-supply = <&vcc1v2_c2>;
+        rockchip,camera-module-index = <1>;
+        rockchip,camera-module-facing = "back";
+        rockchip,camera-module-name = "forlinx";
+        rockchip,camera-module-lens-name = "default";
+        port {
+            cam2_sc132gs_out: endpoint {
+            remote-endpoint = <&mipi_in_1_ucam2>;
+            data-lanes = <1 2>;
+            };
+        };
+    };
 };
 
 &csi2_dcphy1 {
@@ -400,8 +448,8 @@
             #size-cells = <0>;
             mipi_in_1_ucam2: endpoint@1 {
                 reg = <1>;
-                remote-endpoint = <&cam2_ov13855_out>;
-                data-lanes = <1 2 3 4>;
+                remote-endpoint = <&cam2_sc132gs_out>;
+                data-lanes = <1 2>;
             };
         };
         port@1 {

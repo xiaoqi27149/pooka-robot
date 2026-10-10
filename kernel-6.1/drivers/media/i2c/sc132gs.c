@@ -1023,8 +1023,8 @@ static int __sc132gs_power_on(struct sc132gs *sc132gs)
 	if (!IS_ERR(sc132gs->reset_gpio))
 		gpiod_set_value_cansleep(sc132gs->reset_gpio, 0);
 
-	/* 8192 cycles prior to first SCCB transaction */
-	delay_us = sc132gs_cal_delay(8192);
+	/* SC132GS needs long time after XSHUTDN high before I2C ready */
+	delay_us = sc132gs_cal_delay(24000000);
 	usleep_range(delay_us, delay_us * 2);
 
 	return 0;
