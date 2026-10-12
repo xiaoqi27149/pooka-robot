@@ -828,3 +828,8 @@
 	status = "disabled";
 };
 
+/* 双目 SC132GS 帧同步：PWM4_M0 (GPIO0_C5) -> 飞线 -> 转接板 TP_PWM -> 两路 FSYNC */
+&pwm4 {
+	status = "okay";
+};
+

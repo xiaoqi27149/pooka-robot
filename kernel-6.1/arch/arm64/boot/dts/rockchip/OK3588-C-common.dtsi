@@ -335,7 +335,7 @@
 		width-mm = <254>;
 		height-mm = <169>;
 		enable-gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_HIGH>;
-		status = "okay";
+		status = "disabled";
 
 		port {
 			panel_in_edp1: endpoint {
@@ -346,6 +346,7 @@
 
 	backlight_edp1: backlight-edp1 {
 		compatible = "pwm-backlight";
+		status = "disabled";
 		pwms = <&pwm4 0 20000 0>;
 		brightness-levels = <
 			  0  20  20  21  21  22  22  23
