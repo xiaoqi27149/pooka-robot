@@ -1,0 +1,20 @@
+if TARGET_OK3588_C
+
+config SYS_BOARD
+	default "ok3588"
+
+config SYS_VENDOR
+	default "rockchip"
+
+config SYS_CONFIG_NAME
+	default "ok3588"
+
+config BOARD_SPECIFIC_OPTIONS # dummy
+	def_bool y
+
+config FORLINX_OK3588_LINUX
+	bool "Forlinx OK3588-C Linux"
+	help
+	  Setup for OK3588-C Linux
+
+endif

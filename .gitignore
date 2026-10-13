@@ -1,0 +1,14 @@
+# ===== 飞凌原生 SDK 原有忽略项 =====
+/output/
+/rockdev
+/robot
+
+# ===== 剔除 >100MB 文件（GitHub 单文件硬上限，push 会被拒绝）=====
+/debian-for-ros-arm64-bullseye.tar
+/prebuilts/gcc/linux-x86/aarch64/arm-gnu-toolchain-13.2.Rel1-x86_64-aarch64-none-elf/bin/aarch64-none-elf-gdb
+/tools/linux/PinDebug/pin_debug_tool_v1.11_for_linux.tar
+/external/camera_engine_rkaiq/IspFec/src/gen_mesh/android/genMesh_static_64bit/libgenMeshLib.a
+/external/camera_engine_rkaiq/IspFec/src/gen_mesh/android/genMesh_static_32bit/libgenMeshLib.a
+
+# RKROS 提交里的大 deb（>100MB）
+/debian/packages/arm64/humble/ros2-humble-bin-1.0.0-1-arm64.deb
