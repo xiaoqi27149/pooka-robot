@@ -5,22 +5,21 @@
 ## 仓库说明
 
 本仓库已包含完整 SDK 源码（kernel / u-boot / rkbin / prebuilts / debian / device / buildroot / external / rtos / robot 等）。
-为满足 GitHub「单文件 100MB」限制，以下 2 个 >100MB 的 ros2 预编译包被 `.gitignore` 排除、未上传：
+为满足 GitHub「单文件 100MB」限制，以下文件被 `.gitignore` 排除、未上传：
 
-| 路径 | 大小 | 说明 |
-|---|---|---|
-| `robot/prebuilts/ros2/humble/ros2-humble-bin-1.0.0-1-arm64.deb` | 142MB | ROS2 humble 预编译包 |
-| `robot/prebuilts/ros2/jazzy/ros2-jazzy-bin-1.0.0-1-arm64.deb` | 145MB | ROS2 jazzy 预编译包 |
+| 路径 | 大小 | 用途 | 编译必需 |
+|---|---|---|---|
+| `robot/prebuilts/ros2/humble/ros2-humble-bin-1.0.0-1-arm64.deb` | 142MB | ROS2 humble 预编译包 | 编 ROS rootfs 需要 |
+| `robot/prebuilts/ros2/jazzy/ros2-jazzy-bin-1.0.0-1-arm64.deb` | 145MB | ROS2 jazzy 预编译包 | 编 ROS rootfs 需要 |
+| `debian-for-ros-arm64-bullseye.tar` | 4.4GB | docker 镜像（debian-for-ros-arm64:bullseye） | 编 rkros 需要 |
 
-> 此外还有若干构建产物、调试工具、Android 专用库被忽略（见 `.gitignore`），编译都用不到。
-
-clone 后 `./build.sh` 可直接运行（`robot/scripts` 已入库），但**构建 ROS rootfs 前需补齐上述 2 个 .deb**。
+> 其余被忽略项（构建输出、调试工具、Android 专用库等）编译用不到，见 `.gitignore`。
 
 ## 快速开始
 
 ### 0. 前置
 
-- 本地有一份**完整的飞凌 SDK**（含上述 2 个 .deb），路径记为 `<FULL_SDK>`
+- 本地有一份**完整的飞凌 SDK**，路径记为 `<FULL_SDK>`
 
 ### 1. 克隆
 
@@ -29,10 +28,11 @@ git clone git@github.com:xiaoqi27149/pooka-robot.git
 cd pooka-robot
 ```
 
-### 2. 补齐 2 个 ros2 .deb
+### 2. 补齐被排除的文件
 
 ```bash
-./restore-build-files.sh <FULL_SDK>
+./restore-build-files.sh <FULL_SDK>                  # 只补 2 个 ros2 .deb
+./restore-build-files.sh <FULL_SDK> --with-docker    # 同时补 docker 镜像 tar（编 rkros 用）
 ```
 
 ### 3. 编译
@@ -41,8 +41,24 @@ cd pooka-robot
 ./build.sh
 ```
 
-> 若不需要 ROS rootfs（只编 kernel / u-boot / 基础 rootfs），可跳过第 2 步直接 `./build.sh`。
-> 首次编译 debian rootfs 需联网下载 Debian 软件包（走清华镜像）；遇到 `Couldn't download packages` 类报错多为瞬时网络抖动，直接重跑 `./build.sh` 即可。
+## 编译 RKROS 前必读
+
+`./build.sh` 编译 rkros 时需要一个名为 `debian-for-ros-arm64:bullseye` 的 docker 镜像。
+**如果镜像不存在，rkros 编译会被静默跳过**——脚本（`check-docker.sh`）只打印一行
+`Error: not found docker image` 后 `return 1`，但不带 `set -e`、也不检查返回值，
+于是构建继续往下走，最终产出的 rootfs **不包含 RKROS 包**，而构建看起来仍然「成功」。
+
+因此编 rkros 前，请先加载镜像：
+
+```bash
+docker load < debian-for-ros-arm64-bullseye.tar
+docker image ls | grep debian-for-ros   # 应能看到 debian-for-ros-arm64:bullseye
+```
+
+如何确认 rkros 真的编进去了：看 `robot/rkros/output/.last_build` 是否存在——
+存在即表示 rkros 打包完成；只有 `.timestamp` 而没有 `.last_build`，说明被静默跳过了。
+
+> 只编 kernel / u-boot / 基础 rootfs（不需要 ROS）的话，无需 docker 镜像，直接 `./build.sh` 即可。
 
 ## 提交历史结构
 
