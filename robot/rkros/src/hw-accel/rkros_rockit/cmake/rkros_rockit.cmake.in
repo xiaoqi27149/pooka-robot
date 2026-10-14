@@ -1,0 +1,6 @@
+@PACKAGE_INIT@
+
+set(rkros_rockit_INCLUDE_DIRS "${PACKAGE_PREFIX_DIR}/include")
+set(rkros_rockit_LIBRARIES "${PACKAGE_PREFIX_DIR}/lib/librockit.so")
+
+check_required_components(rockit)

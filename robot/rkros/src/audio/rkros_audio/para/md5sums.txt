@@ -1,0 +1,7 @@
+cd992e01c09102aa94441939ea70430e  model1.data
+2baf3662b638016dd57d21c4f9836329  model2.data
+2a04d545b41e2a236383e239dca6a182  model3.data
+10da4d12c8ef1f135e5b172aae3a5725  model4.mnn
+693bbcdea281f5fb8622a542f13a506e  model5.mnn
+946ee8806deffad172c03a154e2a50d7  rk_audio_hci.cfg
+10df1b28251b0fe7b551ebdb23bec05c  rk_audio_hci.json

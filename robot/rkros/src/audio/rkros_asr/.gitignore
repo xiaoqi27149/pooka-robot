@@ -1,0 +1,9 @@
+*.tar.gz
+*.patch
+*.diff
+build-linux.sh
+copy_asr_data.sh
+data/
+lib/Android/
+RK3588_ROCKX2_SDK_V1.0.0_20250621/tool/
+RK3588_ROCKX2_SDK_V1.0.0_20250621/lib/Android/

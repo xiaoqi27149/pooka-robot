@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch file for rkros_audio package -->
+
+  <!-- Audio publisher node -->
+  <node pkg="rkros_audio" exec="audio_publisher" name="audio_publisher" output="screen">
+  </node>
+
+  <!-- Audio subscriber node -->
+  <node pkg="rkros_audio" exec="audio_subscriber" name="audio_subscriber" output="screen">
+  </node>
+
+</launch>

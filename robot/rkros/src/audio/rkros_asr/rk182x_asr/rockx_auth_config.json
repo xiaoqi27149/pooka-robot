@@ -1,0 +1,9 @@
+{ 
+    "trial": 1,
+    "rkauth_modules_config": [
+        {
+        "module": "asr",
+        "license_path": "/data/key_asr.lic"
+        }
+    ]
+}

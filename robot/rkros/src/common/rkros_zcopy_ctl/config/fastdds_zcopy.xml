@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+  <!-- 缺省发布端配置 -->
+  <data_writer profile_name="default publisher profile" is_default_profile="true">
+    <qos>
+      <publishMode>
+        <kind>ASYNCHRONOUS</kind>  <!-- 可选项 SYNCHRONOUS -->
+      </publishMode>
+      <!-- 启用共享内存数据共享，实现零拷贝 -->
+      <data_sharing>
+        <kind>AUTOMATIC</kind>
+      </data_sharing>
+    </qos>
+    <!-- 允许 loaned message（零拷贝） -->
+    <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
+  </data_writer>
+
+  <!-- 缺省订阅端配置 -->
+  <data_reader profile_name="default subscription profile" is_default_profile="true">
+    <qos>
+      <data_sharing>
+        <kind>AUTOMATIC</kind>
+      </data_sharing>
+    </qos>
+    <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
+  </data_reader>
+</profiles>

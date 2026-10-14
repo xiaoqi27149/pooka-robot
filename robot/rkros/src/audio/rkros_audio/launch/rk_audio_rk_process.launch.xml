@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch file for rkros_audio processor: captures multi-channel audio, processes with Rockchip library, publishes to rkaudio -->
+
+  <!-- Audio RK processor node (with Rockchip audio processing) -->
+  <!-- This node captures 8-channel audio, processes it with Rockchip library, and publishes processed single-channel audio to /rkaudio -->
+  <node pkg="rkros_audio" exec="audio_rk_processor" name="audio_rk_processor" output="screen">
+    <!-- Set environment variable for library path -->
+    <env name="LD_LIBRARY_PATH" value="$(find-pkg-share rkros_audio)/rk_lib:$(env LD_LIBRARY_PATH)" />
+  </node>
+
+</launch>

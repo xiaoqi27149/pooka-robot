@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch file for rkros_audio package with Rockchip processing -->
+
+  <!-- Audio RK processor node (with Rockchip audio processing) -->
+  <node pkg="rkros_audio" exec="audio_rk_processor" name="audio_rk_processor" output="screen">
+  </node>
+
+</launch>

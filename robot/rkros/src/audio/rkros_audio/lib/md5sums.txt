@@ -1,0 +1,1 @@
+bc1bf0e81662d77bf5f4b2ac423eee68  librk_audio_hci.so

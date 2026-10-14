@@ -1,0 +1,8 @@
+*.tar.gz
+*.patch
+*.diff
+lib/Android
+models
+checksums.txt
+copy_tts_data.sh
+generate_md5sums.sh

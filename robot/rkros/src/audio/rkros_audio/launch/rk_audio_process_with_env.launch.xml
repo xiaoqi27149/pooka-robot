@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch file for rkros_audio processor with Rockchip library -->
+
+  <!-- Set environment variables for Rockchip library -->
+  <env name="LD_LIBRARY_PATH" value="$(find-pkg-share rkros_audio)/../lib/rkros_audio:$(env LD_LIBRARY_PATH)" />
+
+  <!-- Audio RK processor node (with Rockchip audio processing) -->
+  <node pkg="rkros_audio" exec="audio_rk_processor" name="audio_rk_processor" output="screen">
+  </node>
+
+</launch>

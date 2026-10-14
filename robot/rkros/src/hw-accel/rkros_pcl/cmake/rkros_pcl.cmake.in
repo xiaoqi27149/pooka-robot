@@ -1,0 +1,4 @@
+@PACKAGE_INIT@
+
+set(rkros_pcl_INCLUDE_DIRS "${PACKAGE_PREFIX_DIR}/include")
+set(rkros_pcl_LIBRARIES "${PACKAGE_PREFIX_DIR}/lib/librkALG_pclCore.so")

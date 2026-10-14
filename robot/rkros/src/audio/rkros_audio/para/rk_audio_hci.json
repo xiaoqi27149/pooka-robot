@@ -1,0 +1,161 @@
+{
+    "hci_configs": {
+      "license_path": "/data/key_audio3a.lic",
+
+      "para_path": "./para",
+
+      "case": {
+        "mic_num": 8,
+        "far_num": 2,
+        "sample_rate": 16000,
+        "frame_len_ms": 20,
+        "mic_gain_dB": 0,
+        "far_gain_dB": 0,
+        "aec_gain_dB": 7,
+        "aec_level" : 1,
+        "aiec_level" : 1,
+        "ainr_level" : 1,
+        "post_level" : 0,
+        "eq_level" : 0,
+        "agc_level" : 1,
+        "doa_level" : 3,
+        "bf_level" : 1,
+        "delay_level": 0,
+        "kws_level": 1,
+        "sed_level": 1
+      },
+
+      "aiec": {
+        "post_level": 0,
+        "min_gain_d100": 0,
+        "post_ser_echo_d100": 80,
+        "post_ser_near_d100": 200
+      },
+
+      "ainr": {
+        "post_level" : 0,
+        "min_gain_d100": 0,
+        "post_snr_noise_d100": 80,
+        "post_snr_speech_d100": 200
+      },
+
+      "bf": {
+        "array_type" : 0,
+        "enable_fix_direction": 0,
+        "value_fix_direction": 120
+      },
+
+      "post": {
+        "post_mode" : 2,
+        "add_gain_d100":10,
+        "thres": -1
+      },
+
+      "agc": {
+        "attack_time_ms" : 200,
+        "release_time_ms" : 200,
+        "max_gain_dB": 5,
+        "peak_value_dB": -3,
+        "noise_thd_dB": -70,
+        "compress_start_dB": -60,
+        "expand_end_dB": -20,
+        "out_vad_flag": 1
+      },
+
+      "eq": {
+        "section_num" : 2,
+        "section_1_center_freq" : 200,
+        "section_1_gain_dB": -3,
+        "section_1_q_factor_d100": 70,
+        "section_2_center_freq" : 1600,
+        "section_2_gain_dB": -24,
+        "section_2_q_factor_d100": 25,
+        "section_3_center_freq" : 0,
+        "section_3_gain_dB": 0,
+        "section_3_q_factor_d100": 0,
+        "section_4_center_freq" : 0,
+        "section_4_gain_dB": 0,
+        "section_4_q_factor_d100": 0,
+        "section_5_center_freq" : 0,
+        "section_5_gain_dB": 0,
+        "section_5_q_factor_d100": 0
+      },
+
+      "doa": {
+        "array_type": 0,
+        "array_distance_mm": 35,
+        "skip_frms": 2,
+        "degree_resolution": 2,
+        "start_freq": 600,
+        "end_freq": 3500,
+        "delay_frms": 25,
+        "speech_energy_thd": 100
+      },
+
+      "sed": {
+        "skip_frm1": 5,
+        "skip_frm2": 5,
+        "prob": 75
+      }
+    },
+
+    "skv_configs": {
+      "drop_ref_chan": 0,
+      "ref_pos": 1,
+      "aec": {
+        "status": "disable"
+      },
+      "bf": {
+        "status": "enable",
+        "ainr_pos": 0
+      },
+      "fix": {
+        "status": "disable",
+        "Targ": 5
+      },
+      "dereverb": {
+        "status": "disable"
+      },
+      "aes": {
+        "status": "disable"
+      },
+      "anr": {
+        "status": "disable"
+      },
+      "agc": {
+        "status": "disable"
+      },
+      "howl": {
+        "status": "disable"
+      },
+      "fastaec": {
+        "status": "disable"
+      },
+      "gsc": {
+        "status": "disable"
+      },
+      "wakeup": {
+        "status": "enable",
+        "consistent_flag": 0
+      },
+      "simple_voiceprint": {
+        "status": "disable"
+      },
+      "unkws": {
+        "status": "disable"
+      },
+      "doa": {
+        "status": "disable"
+      },
+      "ainr": {
+        "status": "disable"
+      },
+      "aiec": {
+        "status": "disable"
+      },
+      "EQDRC": {
+        "status": "disable"
+      }
+    }
+  }
+

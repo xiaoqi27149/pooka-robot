@@ -1,0 +1,20 @@
+persimmon
+banana
+yellow banana
+strawberry
+red strawberry
+yellow towel
+towel
+egg
+blue plate
+grape
+yellow block
+green block
+red direction
+small block
+fruit
+food
+person
+bus
+null
+null

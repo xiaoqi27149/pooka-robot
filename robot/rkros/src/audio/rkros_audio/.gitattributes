@@ -1,0 +1,4 @@
+*.cfg binary
+*.data binary
+*.mnn binary
+*.so binary
