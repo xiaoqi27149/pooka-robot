@@ -2,13 +2,11 @@
 #
 # restore-build-files.sh
 #
-# 把「本地完整 SDK」里编译必需、但被 .gitignore 排除（未推上 GitHub）的文件，
+# 把「本地完整 SDK」里编译必需、但被 .gitignore 排除（>100MB）的 2 个 ros2 .deb，
 # 恢复到当前克隆出来的精简 SDK 中。
 #
-# 为什么需要这个脚本：
-#   推 GitHub 时，robot/ 因体积大（1.3GB）被 .gitignore 排除；
-#   但顶层 build.sh 是指向 robot/scripts/build.sh 的符号链接，
-#   不恢复 robot/ 就无法用 ./build.sh 编译。
+# 为什么需要：这 2 个 ros2 预编译包各超 100MB，GitHub 单文件硬限制无法上传；
+# 但构建 ROS rootfs 时（mk-debian.sh 会从 robot/prebuilts/ros2 拷包）需要它们。
 #
 # 用法（在克隆出来的 SDK 根目录执行）：
 #   ./restore-build-files.sh <本地完整SDK路径> [目标SDK路径]
@@ -27,51 +25,29 @@ if [ ! -d "${SRC}" ]; then
     echo "错误: 源 SDK 目录不存在: ${SRC}" >&2
     exit 1
 fi
-mkdir -p "${DST}"
 
 # ---------------------------------------------------------------------------
-# 编译必需、被 .gitignore 排除的目录（当前只有 robot/）。
+# 编译必需、被 .gitignore 排除的 2 个 >100MB 文件。
 #
-# 不需要恢复的（被忽略但编译用不到）：
-#   output/ rockdev/                 —— 编译输出目录，构建时自动生成
-#   debian-for-ros-arm64-bullseye.tar —— 预构建 ROS rootfs 镜像，构建脚本未引用
-#   prebuilts/.../aarch64-none-elf-gdb —— 调试器，非编译所需
-#   tools/linux/PinDebug/*.tar       —— 调试工具，非编译所需
-#   external/camera_engine_rkaiq/IspFec/src/gen_mesh/android/*.a —— Android 专用库
-#   debian/packages/arm64/humble/ros2-humble-bin-*.deb —— 会从 robot/prebuilts 自动拷出
+# 其余被忽略项（构建输出、调试工具、Android 专用库等）编译用不到，无需恢复。
 # ---------------------------------------------------------------------------
-RESTORE_ITEMS=(
-    "robot"
+RESTORE_FILES=(
+    "robot/prebuilts/ros2/humble/ros2-humble-bin-1.0.0-1-arm64.deb"
+    "robot/prebuilts/ros2/jazzy/ros2-jazzy-bin-1.0.0-1-arm64.deb"
 )
 
-copy_item() {
-    local src_path="${SRC}/${1}"
-    local dst_path="${DST}/${1}"
+for f in "${RESTORE_FILES[@]}"; do
+    src="${SRC}/${f}"
+    dst="${DST}/${f}"
 
-    if [ ! -e "${src_path}" ]; then
-        echo "!! 跳过（源不存在）: ${src_path}" >&2
-        return 0
+    if [ ! -f "${src}" ]; then
+        echo "!! 跳过（源不存在）: ${src}" >&2
+        continue
     fi
 
-    echo ">> 恢复 ${1}/  ..."
-    if command -v rsync >/dev/null 2>&1; then
-        rsync -a --info=progress2 "${src_path}/" "${dst_path}/"
-    else
-        cp -a "${src_path}" "${dst_path}"
-    fi
-}
-
-for item in "${RESTORE_ITEMS[@]}"; do
-    copy_item "${item}"
+    echo ">> 恢复 ${f} ..."
+    mkdir -p "$(dirname "${dst}")"
+    cp -a "${src}" "${dst}"
 done
 
-# ---------------------------------------------------------------------------
-# 校验 build.sh 符号链接是否恢复成功
-# ---------------------------------------------------------------------------
-if [ -L "${DST}/build.sh" ] && [ -f "${DST}/robot/scripts/build.sh" ]; then
-    echo "✓ build.sh -> robot/scripts/build.sh 已就绪"
-else
-    echo "!! 警告: build.sh 链接目标仍缺失，请检查 robot/ 是否恢复完整" >&2
-fi
-
-echo "完成。可在 ${DST} 下运行 ./build.sh 编译。"
+echo "完成。若需构建 ROS rootfs，缺失的 2 个 ros2 .deb 已补齐，可运行 ./build.sh 编译。"
