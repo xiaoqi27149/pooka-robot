@@ -48,7 +48,26 @@ cd pooka-robot
 `Error: not found docker image` 后 `return 1`，但不带 `set -e`、也不检查返回值，
 于是构建继续往下走，最终产出的 rootfs **不包含 RKROS 包**，而构建看起来仍然「成功」。
 
-因此编 rkros 前，请先加载镜像：
+### 1. 安装 docker（首次需要）
+
+```bash
+sudo apt install docker.io            # 装标准 docker，不要用 snap/podman
+sudo systemctl enable --now docker    # 启动 daemon 并开机自启
+sudo usermod -aG docker $USER         # 把当前用户加入 docker 组（免 sudo）
+```
+
+装完**重新登录**（或执行 `newgrp docker`）让组权限生效，然后验证：
+
+```bash
+docker info
+```
+
+> 为什么用 `docker.io` 而不是 snap/podman：RKROS 脚本（`check-docker.sh` / `docker-run.sh`）
+> 硬编码了 `/usr/bin/docker` 和 `/var/run/docker.sock`，还用到了 `--privileged`、
+> `--volumes-from`、以及把 `/var/run/docker.sock` 挂进容器（Docker-in-Docker）。
+> 这些只有标准 Docker 完整支持：snap 版 socket 路径/权限不同，podman-docker 版本老且支持不全。
+
+### 2. 加载镜像
 
 ```bash
 docker load < debian-for-ros-arm64-bullseye.tar
